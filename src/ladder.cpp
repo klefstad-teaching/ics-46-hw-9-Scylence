@@ -4,7 +4,9 @@
 #include <vector>
 
 
-void error(string word1, string word2, string msg);  // TODO
+void error(string word1, string word2, string msg) {
+    cout << "Cannot perform word ladder search on \'" << word1 << "\' and \'" << word2 << '\'' << endl;
+}
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d);  // TODO
 
@@ -42,7 +44,10 @@ void load_words(set<string> & word_list, const string& file_name) {
     in.close();
 }
 
-void print_word_ladder(const vector<string>& ladder);  // TODO
+void print_word_ladder(const vector<string>& ladder) {
+    for (string word: ladder)
+        cout << word << "->";
+}
 
 void verify_word_ladder();  // TODO
 
