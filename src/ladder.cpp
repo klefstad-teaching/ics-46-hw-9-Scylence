@@ -14,6 +14,11 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     // Implementation learned from this vid: https://www.youtube.com/watch?v=fJaKO8FbDdo
     int n = str1.size(), m = str2.size();
     vector<int> previous(m+1, 0), current(m+1, 0);
+
+    // Initialize base case: if str1 is empty, then edit distance to str2 is j, j = 0..m
+    for (int j = 0; j <= m; ++j)
+        previous[j] = j;
+
     for (int i = 1; i <= n; ++i) {
         current[0] = i;
         for (int j = 1; j <= m; ++j) {
@@ -26,7 +31,8 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
-    int length_distance = abs(word1.size() - word2.size());
+    int length_distance = word1.size() - word2.size();
+    length_distance = abs(length_distance);
     // Length distance > 1 implies word1 needs 2+ operation to connect to word2
     // so return false immediately;
     // else call edit_distance_within()
