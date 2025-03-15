@@ -62,3 +62,7 @@ void print_path(const vector<int>& v, int total) {
         cout << vertex << ' ';
     cout << endl << "Total cost is " << total << endl;
 }
+
+string get_arg(int argc, char *argv[], string def) {
+    return argc > 1 ? argv[1] : def;
+}
