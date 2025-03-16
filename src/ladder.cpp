@@ -37,7 +37,7 @@ bool is_adjacent(const string& word1, const string& word2) {
         int n = word1.size(), diff = 0;     // return True if word difference = 1, False otherwise
         for (int i = 0; i < n; ++i)
             if (word1[i] != word2[i] && ++diff > 1) return false;
-        return diff == 1;  // Handles equal case
+        return diff <= 1;  // Return true if word1 == word2 or differs by 1 letter
     }
     // Case 3: Length distance = 1. Call edit_distance_within to check insertion/deletion neighbors
     return edit_distance_within(word1, word2, 1);
