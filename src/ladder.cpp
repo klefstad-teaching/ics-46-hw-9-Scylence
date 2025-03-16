@@ -31,12 +31,16 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
-    int length_distance = word1.size() - word2.size();
-    length_distance = abs(length_distance);
-    // Length distance > 1 implies word1 needs 2+ operation to connect to word2
-    // so return false immediately;
-    // else call edit_distance_within()
-    return length_distance <= 1 ? edit_distance_within(word1, word2, 1) : false;
+    int length_distance = abs((int)word1.size() - (int)word2.size());
+    if (length_distance > 1) return false;  // Case 1: Length distance > 1 implies word1 needs 2+ operation to connect to word2
+    if (length_distance == 0) {             // Case 2: Equal length. Compares word by word,
+        int n = word1.size(), diff = 0;     // return True if word difference = 1, False otherwise
+        for (int i = 0; i < n; ++i)
+            if (word1[i] != word2[i] && ++diff > 1) return false;
+        return diff == 1;  // Handles equal case
+    }
+    // Case 3: Length distance = 1. Call edit_distance_within to check insertion/deletion neighbors
+    return edit_distance_within(word1, word2, 1);
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
