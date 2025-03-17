@@ -43,6 +43,37 @@ bool is_adjacent(const string& word1, const string& word2) {
     return edit_distance_within(word1, word2, 1);
 }
 
+set<string> generate_neighbors(const string& word, const set<string>& word_list) {
+    // Find all possible neighbors of word
+    set<string> neighbors;
+    int word_length = word.length();
+
+    // Case 1: substitution
+    for (int i = 0; i < word_length; ++i) {
+        string temp = word;
+        for (char c = 'a'; c <= 'z'; ++c) {
+            if (c == temp[i]) continue;
+            temp[i] = c;
+            if (word_list.count(temp)) neighbors.insert(temp);
+        }
+    }
+
+    // Case 2: insertion
+    for (int i = 0; i <= word_length; ++i) {
+        for (char c = 'a'; c <= 'z'; ++c) {
+            string temp = word.substr(0, i) + c + word.substr(i);
+            if (word_list.count(temp)) neighbors.insert(temp);
+        }
+    }
+
+    // Case 3: deletion
+    for (int i = 0; i < word_length; ++i) {
+        string temp = word.substr(0, i) + word.substr(i + 1);
+        if (word_list.count(temp)) neighbors.insert(temp);
+    }
+    return neighbors;
+}
+
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
     // Return empty ladder if start word == end word
     // or else an infinite loop might occur
@@ -59,15 +90,17 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         ladder = ladder_queue.front();
         ladder_queue.pop();
         string last_word = ladder.back();
-        for (string word: word_list) {
-            if (is_adjacent(last_word, word)) {
-                if (visited.count(word) == 0) {
-                    visited.insert(word);
-                    vector<string> new_ladder = ladder;
-                    new_ladder.push_back(word);
-                    if (word == end_word) return new_ladder;
-                    ladder_queue.push(new_ladder);
-                }
+
+        set<string> neighbors = generate_neighbors(last_word, word_list);
+
+        // Process neighbors narrowed down from word_list
+        for (const string& word: neighbors) {
+            if (!visited.count(word)) {
+                vector<string> new_ladder = ladder;
+                new_ladder.push_back(word);
+                if (word == end_word) return new_ladder;
+                visited.insert(word);
+                ladder_queue.push(new_ladder);
             }
         }
     }
