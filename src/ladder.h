@@ -16,3 +16,5 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
 void load_words(set<string> & word_list, const string& file_name);
 void print_word_ladder(const vector<string>& ladder);
 void verify_word_ladder();
+// Helper to generate neighbors of 1 edit distance to word
+set<string> generate_neighbors(const string& word, const set<string>& word_list);
